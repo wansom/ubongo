@@ -18,7 +18,7 @@ class DashboardScreen extends StatelessWidget {
             Container(
              child:Image.asset("assets/images/baraka-side.png"),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(30),
                  color: AppColor.primaryColor,
                  
               ),
