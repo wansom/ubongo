@@ -1,23 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:ubongo/screens/homescreen.dart';
+import 'package:ubongo/common/injector/injector_config.dart';
+import 'package:ubongo/presentation/app.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import 'common/utils/database_util.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  InjectorConfig.setup();
+  await DatabaseUtil.initDatabase();
 
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
+  runApp(const App());
 }
