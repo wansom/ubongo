@@ -15,22 +15,22 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
   Stream<VideoState> mapEventToState(event) async* {
     switch (event.runtimeType) {
       case FetchVideos:
-        yield* _mapFetchTodoState(event);
+        yield* _mapFetchVideoState(event);
         break;
       case AddVideo:
-        yield* _mapAddTodoState(event);
+        yield* _mapAddVideoState(event);
         break;
       case UpdateVideo:
-        yield* _mapUpdateTodoState(event);
+        yield* _mapUpdateVideoState(event);
         break;
       case DeleteVideo:
-        yield* _mapDeleteTodoState(event);
+        yield* _mapDeleteVideoState(event);
         break;
       default:
     }
   }
 
-  Stream<VideoState> _mapFetchTodoState(FetchVideos event) async* {
+  Stream<VideoState> _mapFetchVideoState(FetchVideos event) async* {
     yield LoadingVideos(videos: state.videos!);
     try {
       final videos = await videoUsecase.getAll(fromLocal: event.fromLocal);
@@ -40,42 +40,42 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
     }
   }
 
-  Stream<VideoState> _mapAddTodoState(AddVideo event) async* {
+  Stream<VideoState> _mapAddVideoState(AddVideo event) async* {
     final videos = state.videos;
     yield LoadingVideos(videos: videos!);
     try {
-      final todo = VideoEntity(
+      final video = VideoEntity(
           description: event.description, completed: false, id: "null");
-      final updatedTodo = await videoUsecase.create(todo);
-      videos.add(updatedTodo);
+      final updatedVideo = await videoUsecase.create(video);
+      videos.add(updatedVideo);
       yield LoadedVideos(videos: videos);
     } catch (e) {
       yield const ErrorVideos();
     }
   }
 
-  Stream<VideoState> _mapUpdateTodoState(UpdateVideo event) async* {
-    final todos = state.videos;
-    yield LoadingVideos(videos: todos!);
+  Stream<VideoState> _mapUpdateVideoState(UpdateVideo event) async* {
+    final videos = state.videos;
+    yield LoadingVideos(videos: videos!);
     try {
-      final todo = todos.singleWhere((VideoEntity todo) => todo.id == event.id);
-      todo.completed = !todo.completed;
-      final updatedTodo = await videoUsecase.update(todo);
-      todos[todos.indexWhere((VideoEntity todo) => todo.id == updatedTodo.id)] =
-          updatedTodo;
-      yield LoadedVideos(videos: todos);
+      final video = videos.singleWhere((VideoEntity video) => video.id == event.id);
+      video.completed = !video.completed;
+      final updatedVideo = await videoUsecase.update(video);
+      videos[videos.indexWhere((VideoEntity video) => video.id == updatedVideo.id)] =
+          updatedVideo;
+      yield LoadedVideos(videos: videos);
     } catch (e) {
       yield const ErrorVideos();
     }
   }
 
-  Stream<VideoState> _mapDeleteTodoState(DeleteVideo event) async* {
-    final todos = state.videos;
-    yield LoadingVideos(videos: todos!);
+  Stream<VideoState> _mapDeleteVideoState(DeleteVideo event) async* {
+    final videos = state.videos;
+    yield LoadingVideos(videos: videos!);
     try {
       await videoUsecase.delete(event.id);
-      todos.removeWhere((VideoEntity todo) => todo.id == event.id);
-      yield LoadedVideos(videos: todos);
+      videos.removeWhere((VideoEntity video) => video.id == event.id);
+      yield LoadedVideos(videos: videos);
     } catch (e) {
       yield const ErrorVideos();
     }

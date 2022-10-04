@@ -14,15 +14,18 @@ class DashboardScreen extends StatelessWidget {
           width: 100,
           height: 50,),
           actions: [
-            const Icon(Icons.search,color: AppColor.white,),
-            Container(
-             child:Image.asset("assets/images/baraka-side.png"),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                 color: AppColor.primaryColor,
-                 
+            const Icon(Icons.search,color: AppColor.white,size: 30,),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+               child:Image.asset("assets/images/baraka-side.png"),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                   color: AppColor.primaryColor,
+                   
+                ),
+                
               ),
-              
             )
           ],
         ),
