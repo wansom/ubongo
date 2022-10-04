@@ -17,15 +17,15 @@ class VideoLocalDatasource extends BaseLocalDataSource<VideoTable, VideoModel> {
     return data.map(VideoTable.toModel).toList();
   }
 
-  Future<void> insertOrUpdateItem(VideoModel todo) async {
-    await put(todo.id, VideoTable.fromModel(todo));
+  Future<void> insertOrUpdateItem(VideoModel video) async {
+    await put(video.id, VideoTable.fromModel(video));
   }
 
   @override
   Future<void> insertOrUpdateAll(List<VideoModel> videos) async {
-    final Map<String, VideoTable> todoMap = {
-      for (var todo in videos) todo.id: VideoTable.fromModel(todo)
+    final Map<String, VideoTable> videoMap = {
+      for (var video in videos) video.id: VideoTable.fromModel(video)
     };
-    await putAll(todoMap);
+    await putAll(videoMap);
   }
 }
