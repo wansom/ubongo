@@ -11,9 +11,6 @@ import 'package:ubongo/presentation/journey/video/bloc/video_state.dart';
 import 'package:ubongo/presentation/journey/video/video_list/widgets/video_item.dart';
 import 'package:ubongo/presentation/journey/video/video_list/widgets/video_list_constants.dart';
 
-
-
-
 class VideoListScreen extends StatefulWidget {
   const VideoListScreen({
     Key? key,
@@ -30,7 +27,8 @@ class _VideoListScreenState extends State<VideoListScreen> {
   @override
   void initState() {
     super.initState();
-    videoBloc = Injector.resolve<VideoBloc>()..add(FetchVideos(fromLocal: false));
+    videoBloc = Injector.resolve<VideoBloc>()
+      ..add(FetchVideos(fromLocal: false));
   }
 
   @override
@@ -64,8 +62,8 @@ class _VideoListScreenState extends State<VideoListScreen> {
           ),
         );
       case LoadedVideos:
-        final List<VideoEntity>? todos = todoState.videos;
-        if (todos!.isEmpty) {
+        final List<VideoEntity>? videos = todoState.videos;
+        if (videos!.isEmpty) {
           return Center(
             child: ElevatedButton(
               key: VideoListConstants.createVideoButton,
@@ -76,7 +74,7 @@ class _VideoListScreenState extends State<VideoListScreen> {
             ),
           );
         }
-        return _todoList(todos);
+        return _videoList(videos);
       case ErrorVideos:
         return const Center(
           child: Text('Errored'),
@@ -86,26 +84,33 @@ class _VideoListScreenState extends State<VideoListScreen> {
     }
   }
 
-  Widget _todoList(List<VideoEntity> todos) {
+  Widget _videoList(List<VideoEntity> videos) {
     return RefreshIndicator(
-      onRefresh: () async {
-        videoBloc.add(FetchVideos(fromLocal: false));
-      },
-      child: ListView.separated(
-        itemCount: todos.length,
-        itemBuilder: (_, int index) => VideoItem(
-          key: ValueKey('${todos[index].id}_item'),
-          video: todos[index],
-          onUpdate: () => videoBloc
-            ..add(
-              UpdateVideo(
-                id: todos[index].id,
+        onRefresh: () async {
+          videoBloc.add(FetchVideos(fromLocal: false));
+        },
+        child: GridView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          // ignore: prefer_const_constructors
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 5,
+            crossAxisSpacing: 5.0,
+            mainAxisSpacing: 5.0,
+          ),
+          itemCount: videos.length,
+          itemBuilder: (_, int index) => VideoItem(
+            key: ValueKey('${videos[index].id}_item'),
+            video: videos[index],
+            onUpdate: () => videoBloc
+              ..add(
+                UpdateVideo(
+                  id: videos[index].id,
+                ),
               ),
-            ),
-          onDelete: () => videoBloc..add(DeleteVideo(id: todos[index].id)),
-        ),
-        separatorBuilder: (_, __) => const Divider(height: 1),
-      ),
-    );
+            onDelete: () => videoBloc..add(DeleteVideo(id: videos[index].id)),
+          ),
+        )
+        );
   }
 }

@@ -27,6 +27,7 @@ dependencies:
   equatable: ^2.0.5
   lints: ^2.0.0
   flutter_spinkit: ^5.1.0
+  video_player: ^2.4.7
 
 dev_dependencies:
   flutter_test:
